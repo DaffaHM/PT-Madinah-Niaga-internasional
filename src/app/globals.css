@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-8xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
+  
+  .btn-primary {
+    @apply bg-navy-900 text-white px-8 py-4 rounded-lg font-semibold hover:bg-navy-800 transition-all duration-300 inline-flex items-center gap-2;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-navy-900 text-navy-900 px-8 py-4 rounded-lg font-semibold hover:bg-navy-900 hover:text-white transition-all duration-300 inline-flex items-center gap-2;
+  }
+  
+  .btn-accent {
+    @apply bg-gradient-to-r from-gold-500 to-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:from-gold-600 hover:to-orange-600 transition-all duration-300 inline-flex items-center gap-2;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  .diagonal-cut {
+    clip-path: polygon(0 0, 70% 0, 85% 100%, 0% 100%);
+  }
+
+  .font-luxury {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-luxury-alt {
+    font-family: 'Cormorant Garamond', serif;
+  }
+}
+
+/* Custom button hover effect with gold color */
+.btn-custom-hover::before {
+  background-color: #CDB696 !important;
+}

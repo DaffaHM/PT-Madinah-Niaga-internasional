@@ -5,6 +5,9 @@ import Header from '@/components/layout/Header'
 export const metadata: Metadata = {
   title: 'PT Madinah Niaga Internasional',
   description: 'Your premier gateway for strategic sourcing and seamless logistics between Saudi Arabia and Indonesia.',
+  icons: {
+    icon: '/logo.svg',
+  },
 }
 
 export default function RootLayout({

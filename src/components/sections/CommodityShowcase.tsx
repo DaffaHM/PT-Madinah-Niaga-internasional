@@ -24,7 +24,7 @@ const commodities: CommodityCard[] = [
   },
   {
     id: 2,
-    title: 'Industrial & Chemical Products',
+    title: 'Industrial & Merchandise Products',
     description: 'Reliable sourcing for polymers and specialty materials.',
     image: '/industrial.png',
     gradient: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(10,25,40,0.75) 100%)',
@@ -212,7 +212,7 @@ export default function CommodityShowcase() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full bg-white py-24 md:py-32 lg:py-40"
+      className="relative w-full bg-white py-12 md:py-16 lg:py-20"
     >
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16">
         <div className="text-center mb-16 md:mb-20 lg:mb-24">

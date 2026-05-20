@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
 export default function HeroSection() {
   const [isMobile, setIsMobile] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const [currentBgIndex, setCurrentBgIndex] = useState(0)
   
   // Refs for GSAP animations
   const heroRef = useRef<HTMLDivElement>(null)
@@ -19,6 +20,11 @@ export default function HeroSection() {
   const descriptionRef = useRef<HTMLParagraphElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const scrollIndicatorRef = useRef<HTMLDivElement>(null)
+  const bg1Ref = useRef<HTMLDivElement>(null)
+  const bg2Ref = useRef<HTMLDivElement>(null)
+  
+  // Background images untuk mobile
+  const mobileBackgrounds = ['/bg-mb.png', '/bg-mb-kurma.png']
 
   useEffect(() => {
     setIsClient(true)
@@ -30,6 +36,40 @@ export default function HeroSection() {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  // Background slideshow untuk mobile
+  useEffect(() => {
+    if (!isClient || !isMobile) return
+
+    // Set initial state
+    if (bg1Ref.current && bg2Ref.current) {
+      gsap.set(bg1Ref.current, { opacity: 1 })
+      gsap.set(bg2Ref.current, { opacity: 0 })
+    }
+
+    const interval = setInterval(() => {
+      setCurrentBgIndex((prev) => {
+        const nextIndex = (prev + 1) % mobileBackgrounds.length
+        
+        // Animate transition dengan GSAP
+        if (bg1Ref.current && bg2Ref.current) {
+          if (nextIndex === 1) {
+            // Fade to bg2
+            gsap.to(bg1Ref.current, { opacity: 0, duration: 1.5, ease: 'power2.inOut' })
+            gsap.to(bg2Ref.current, { opacity: 1, duration: 1.5, ease: 'power2.inOut' })
+          } else {
+            // Fade to bg1
+            gsap.to(bg1Ref.current, { opacity: 1, duration: 1.5, ease: 'power2.inOut' })
+            gsap.to(bg2Ref.current, { opacity: 0, duration: 1.5, ease: 'power2.inOut' })
+          }
+        }
+        
+        return nextIndex
+      })
+    }, 5000) // Ganti setiap 5 detik
+
+    return () => clearInterval(interval)
+  }, [isClient, isMobile, mobileBackgrounds.length])
 
   useEffect(() => {
     // Tunggu sampai client-side render selesai
@@ -138,7 +178,23 @@ export default function HeroSection() {
   }, [isClient, isMobile]) // Hapus isClient dari dependency
 
   return (
-    <section ref={heroRef} className={`relative py-12 md:py-16 overflow-hidden ${isMobile ? 'bg-cover bg-center' : 'bg-white'}`} style={isMobile ? { backgroundImage: 'url(/bg-mb.png)' } : {}}>
+    <section ref={heroRef} className={`relative py-12 md:py-16 overflow-hidden ${isMobile ? '' : 'bg-white'}`}>
+      {/* Mobile Background Slideshow */}
+      {isMobile && isClient && (
+        <>
+          <div 
+            ref={bg1Ref}
+            className="absolute inset-0 bg-cover bg-center z-0"
+            style={{ backgroundImage: `url(${mobileBackgrounds[0]})` }}
+          />
+          <div 
+            ref={bg2Ref}
+            className="absolute inset-0 bg-cover bg-center z-0"
+            style={{ backgroundImage: `url(${mobileBackgrounds[1]})` }}
+          />
+        </>
+      )}
+      
       <style jsx>{`
         @media (max-width: 767px) {
           section::before {
@@ -253,7 +309,7 @@ export default function HeroSection() {
 
           {/* Subheadline */}
           <p ref={descriptionRef} className="text-white md:text-gray-500 text-[14px] md:text-[16px] mb-8 max-w-[200px] md:max-w-3xl md:mx-auto leading-relaxed">
-            PT Madinah Niaga Internasional is your premier gateway for strategic sourcing and seamless logistics between Saudi Arabia and Indonesia. We find the goods, handle the regulations, and deliver excellence directly to your door.
+            PT Madinah Niaga Internasional is your premier gateway for strategic sourcing and seamless logistics between Saudi Arabia and Indonesia. We find the goods, handle the regulations, and deliver excellence directly to your door.q
           </p>
 
           {/* CTA Button */}

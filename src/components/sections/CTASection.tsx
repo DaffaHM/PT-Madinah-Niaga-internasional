@@ -98,7 +98,7 @@ export default function CTASection() {
     }
   }, [])
 
-  const whatsappNumber = '6281234567890'
+  const whatsappNumber = '6281249794530'
   const whatsappMessage = encodeURIComponent('Halo, saya ingin berkonsultasi mengenai sourcing produk dari Arab Saudi.')
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 

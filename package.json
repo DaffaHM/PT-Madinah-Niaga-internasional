@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node --max-old-space-size=512 ./node_modules/next/dist/bin/next build",
-    "start": "node --max-old-space-size=256 ./node_modules/next/dist/bin/next start",
-    "start:standalone": "node --max-old-space-size=256 .next/standalone/server.js",
+    "build": "next build",
+    "postbuild": "node scripts/deploy-prepare.js",
+    "start": "node server.js",
     "lint": "next lint"
   },
   "engines": {

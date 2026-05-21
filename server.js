@@ -1,30 +1,26 @@
 // server.js — Entry point untuk cPanel Node.js App (Phusion Passenger)
-// File ini diperlukan agar cPanel bisa menjalankan aplikasi Next.js
-// Jangan hapus file ini.
+//
+// STRATEGI DEPLOY:
+// Build dilakukan LOKAL, lalu folder hasil build diupload ke server.
+// File ini hanya mem-forward ke .next/standalone/server.js yang sudah
+// berisi semua yang dibutuhkan (Next.js + dependencies minimal).
+//
+// Struktur yang diupload ke cPanel:
+//   /home/user/app/
+//   ├── server.js              ← file ini (entry point cPanel)
+//   ├── .next/
+//   │   ├── standalone/        ← hasil build (self-contained server)
+//   │   └── static/            ← static assets (JS, CSS, dll)
+//   └── public/                ← gambar dan aset publik
 
-const { createServer } = require('http')
-const { parse } = require('url')
-const next = require('next')
+'use strict'
 
-const dev = process.env.NODE_ENV !== 'production'
-const hostname = process.env.HOST || 'localhost'
-const port = parseInt(process.env.PORT || '3000', 10)
+const path = require('path')
 
-const app = next({ dev, hostname, port })
-const handle = app.getRequestHandler()
+// Set environment sebelum load standalone server
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+process.env.PORT = process.env.PORT || '3000'
+process.env.HOSTNAME = process.env.HOSTNAME || '0.0.0.0'
 
-app.prepare().then(() => {
-  createServer(async (req, res) => {
-    try {
-      const parsedUrl = parse(req.url, true)
-      await handle(req, res, parsedUrl)
-    } catch (err) {
-      console.error('Error occurred handling', req.url, err)
-      res.statusCode = 500
-      res.end('internal server error')
-    }
-  }).listen(port, (err) => {
-    if (err) throw err
-    console.log(`> Ready on http://${hostname}:${port}`)
-  })
-})
+// Jalankan standalone server hasil build Next.js
+require(path.join(__dirname, '.next', 'standalone', 'server.js'))

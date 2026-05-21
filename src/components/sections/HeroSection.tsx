@@ -74,7 +74,6 @@ export default function HeroSection() {
           headlineRef.current,
           subheadlineRef.current,
           descriptionRef.current,
-          buttonRef.current,
           scrollIndicatorRef.current,
         ].filter(Boolean),
         { opacity: 0, y: 30 }
@@ -93,7 +92,6 @@ export default function HeroSection() {
       tl.to(headlineRef.current, { opacity: 1, y: 0, duration: 1 }, isMobile ? 0.2 : 1.2)
       tl.to(subheadlineRef.current, { opacity: 1, y: 0, duration: 1 }, isMobile ? 0.4 : 1.4)
       tl.to(descriptionRef.current, { opacity: 1, y: 0, duration: 1 }, isMobile ? 0.8 : 1.8)
-      tl.to(buttonRef.current, { opacity: 1, y: 0, scale: 1, duration: 0.8 }, isMobile ? 1 : 2)
 
       if (scrollIndicatorRef.current && isMobile) {
         tl.to(scrollIndicatorRef.current, { opacity: 1, y: 0, duration: 0.8 }, 1.2)
@@ -206,7 +204,6 @@ export default function HeroSection() {
             type="button"
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-custom-hover md:flex md:justify-center md:gap-2 md:items-center md:mx-auto md:text-lg md:bg-gray-50 md:backdrop-blur-md md:font-medium md:isolation-auto md:before:absolute md:before:w-full md:before:transition-all md:before:duration-700 md:before:hover:w-full md:before:-left-full md:before:hover:left-0 md:before:rounded-full md:hover:text-gray-50 md:before:-z-10 md:before:aspect-square md:before:hover:scale-150 md:before:hover:duration-700 md:relative md:z-10 md:px-4 md:py-2 md:overflow-hidden md:border md:border-gray-900 md:rounded-full md:group flex justify-start gap-2 items-center text-base bg-white text-gray-900 font-medium px-6 py-3 rounded-full border-0 hover:bg-gray-100 transition-all duration-300"
-            style={{ opacity: 0 }}
           >
             Get a Free Consultation
           </button>

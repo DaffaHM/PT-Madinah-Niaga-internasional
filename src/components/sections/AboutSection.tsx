@@ -14,12 +14,11 @@ export default function AboutSection() {
   const labelRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
-  const btnRef = useRef<HTMLButtonElement>(null)
   const lineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.set([imageRef.current, labelRef.current, headingRef.current, descRef.current, btnRef.current], {
+      gsap.set([imageRef.current, labelRef.current, headingRef.current, descRef.current], {
         opacity: 0, y: 30
       })
       gsap.set(lineRef.current, { scaleX: 0, transformOrigin: 'left' })
@@ -37,7 +36,6 @@ export default function AboutSection() {
         .to(lineRef.current, { scaleX: 1, duration: 0.4, ease: 'power3.out' }, '-=0.2')
         .to(headingRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.2')
         .to(descRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
-        .to(btnRef.current, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, '-=0.2')
 
     }, sectionRef)
     return () => ctx.revert()
@@ -104,12 +102,10 @@ export default function AboutSection() {
 
             {/* CTA Button */}
             <button 
-              ref={btnRef}
               onClick={() => {
                 document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
               }}
-              className="bg-[#2D6A4F] hover:bg-[#1B4332] text-white font-semibold text-[14px] md:text-[15px] px-6 md:px-7 py-3 md:py-3.5 rounded-full transition-all duration-300"
-              style={{ opacity: 0 }}
+              className="bg-[#2D6A4F] hover:bg-[#1B4332] text-white font-semibold text-[14px] md:text-[15px] px-6 md:px-7 py-3 md:py-3.5 rounded-full transition-colors duration-200"
             >
               Explore Our Services
             </button>

@@ -83,7 +83,7 @@ export default function AboutSection() {
             className="relative z-10 pt-0 md:pt-8 pb-8 pr-6 pl-6 md:pl-[380px] lg:pl-[460px] md:pr-12 lg:pr-16 md:py-12 lg:py-16"
           >
             {/* Label */}
-            <div ref={labelRef} className="mb-3 md:mb-4">
+            <div ref={labelRef} className="mb-3 md:mb-4" style={{ opacity: 0 }}>
               <span className="text-[#2D6A4F] font-bold text-xs md:text-sm tracking-[0.2em] uppercase">
                 WHO ARE WE
               </span>
@@ -91,14 +91,14 @@ export default function AboutSection() {
             </div>
 
             {/* Heading */}
-            <h2 ref={headingRef} className="text-[24px] md:text-[32px] lg:text-[38px] font-serif font-normal leading-[1.15] mb-4 md:mb-5 text-[#1B4332]">
+            <h2 ref={headingRef} className="text-[24px] md:text-[32px] lg:text-[38px] font-serif font-normal leading-[1.15] mb-4 md:mb-5 text-[#1B4332]" style={{ opacity: 0 }}>
               Your Strategic Partner<br />
               in the Heart of<br />
               <span className="text-[#B8956A]">Saudi Arabia</span>
             </h2>
 
             {/* Description */}
-            <p ref={descRef} className="text-gray-600 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed mb-6 md:mb-7 max-w-xl">
+            <p ref={descRef} className="text-gray-600 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed mb-6 md:mb-7 max-w-xl" style={{ opacity: 0 }}>
               PT Madinah Niaga Internasional is an international trading company dedicated to simplifying the complexities of cross-border trade. With a strong physical presence in Saudi Arabia, we provide Indonesian businesses with direct access to high-quality Saudi commodities. We act not just as a trader, but as your eyes and ears on the ground, ensuring every transaction is secure, transparent, and efficient.
             </p>
 
@@ -109,6 +109,7 @@ export default function AboutSection() {
                 document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
               }}
               className="bg-[#2D6A4F] hover:bg-[#1B4332] text-white font-semibold text-[14px] md:text-[15px] px-6 md:px-7 py-3 md:py-3.5 rounded-full transition-all duration-300"
+              style={{ opacity: 0 }}
             >
               Explore Our Services
             </button>

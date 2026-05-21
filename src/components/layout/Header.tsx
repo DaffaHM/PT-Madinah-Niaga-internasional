@@ -96,7 +96,7 @@ export default function Header() {
       <header
         ref={headerRef}
         className={`sticky top-0 z-50 ${isScrolled && !isMobile ? 'pt-4 px-4' : ''}`}
-        style={{ transition: 'padding 0.3s ease' }}
+        style={{ transition: 'padding 0.3s ease', opacity: 0 }}
         suppressHydrationWarning
       >
         <div

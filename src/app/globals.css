@@ -46,10 +46,12 @@
   scrollbar-width: none;
 }
 
-/* GPU-accelerated animation hints */
-.card-animate,
-.journey-step,
-.why-card,
-.commodity-card {
-  will-change: transform, opacity;
+/* GPU-accelerated animation hints — desktop only */
+@media (min-width: 768px) {
+  .card-animate,
+  .journey-step,
+  .why-card,
+  .commodity-card {
+    will-change: transform, opacity;
+  }
 }

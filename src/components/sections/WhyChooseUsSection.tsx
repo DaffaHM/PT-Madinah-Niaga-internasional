@@ -32,24 +32,41 @@ export default function WhyChooseUsSection() {
         }
       )
 
-      // Cards: alternating slide-in (even from left, odd from right)
+      // Cards: di mobile cukup fade+y, di desktop slide dari kiri/kanan
       const cards = cardsRef.current?.querySelectorAll('.why-card')
-      cards?.forEach((card, i) => {
-        gsap.fromTo(card,
-          { opacity: 0, x: i % 2 === 0 ? -60 : 60, y: 20 },
-          {
-            opacity: 1, x: 0, y: 0, duration: 0.85, ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 90%',
-              toggleActions: 'play none none none',
-            },
-          }
-        )
+      const mm = gsap.matchMedia()
+
+      mm.add('(max-width: 767px)', () => {
+        cards?.forEach((card) => {
+          gsap.fromTo(card,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1, y: 0, duration: 0.6, ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 92%',
+                toggleActions: 'play none none none',
+              },
+            }
+          )
+        })
       })
 
-      // Card image parallax on hover (desktop only)
-      const mm = gsap.matchMedia()
+      mm.add('(min-width: 768px)', () => {
+        cards?.forEach((card, i) => {
+          gsap.fromTo(card,
+            { opacity: 0, x: i % 2 === 0 ? -60 : 60, y: 20 },
+            {
+              opacity: 1, x: 0, y: 0, duration: 0.85, ease: 'power3.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 90%',
+                toggleActions: 'play none none none',
+              },
+            }
+          )
+        })
+      })
       mm.add('(min-width: 1024px)', () => {
         const cardEls = cardsRef.current?.querySelectorAll('.why-card')
         cardEls?.forEach((card) => {

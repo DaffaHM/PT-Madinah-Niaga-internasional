@@ -109,24 +109,36 @@ export default function CommodityShowcase() {
       }
     );
 
-    gsap.fromTo(
-      section.querySelectorAll('.commodity-card'),
-      (index: number) => ({
-        opacity: 0,
-        x: index % 2 === 0 ? -80 : 80,
-      }),
-      {
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 70%',
-        },
-      }
-    );
+    // Cards: mobile cukup fade+y, desktop slide dari kiri/kanan
+    const cardMm = gsap.matchMedia()
+
+    cardMm.add('(max-width: 1023px)', () => {
+      gsap.fromTo(
+        section.querySelectorAll('.commodity-card'),
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: section, start: 'top 75%' },
+        }
+      )
+    })
+
+    cardMm.add('(min-width: 1024px)', () => {
+      gsap.fromTo(
+        section.querySelectorAll('.commodity-card'),
+        (index: number) => ({ opacity: 0, x: index % 2 === 0 ? -80 : 80 }),
+        {
+          opacity: 1, x: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 70%' },
+        }
+      )
+    })
 
     // Card hover GSAP micro-interactions (desktop)
     const mm = gsap.matchMedia()

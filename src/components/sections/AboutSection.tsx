@@ -20,7 +20,7 @@ export default function AboutSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set([imageRef.current, labelRef.current, headingRef.current, descRef.current, btnRef.current], {
-        opacity: 0, y: 40
+        opacity: 0, y: 30
       })
       gsap.set(lineRef.current, { scaleX: 0, transformOrigin: 'left' })
 
@@ -28,17 +28,16 @@ export default function AboutSection() {
         scrollTrigger: {
           trigger: cardRef.current,
           start: 'top 80%',
-          end: 'top 50%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         }
       })
 
-      tl.to(imageRef.current, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
-        .to(labelRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.5')
-        .to(lineRef.current, { scaleX: 1, duration: 0.5, ease: 'power3.out' }, '-=0.3')
-        .to(headingRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.3')
-        .to(descRef.current, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4')
-        .to(btnRef.current, { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.4)' }, '-=0.3')
+      tl.to(imageRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+        .to(labelRef.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.4')
+        .to(lineRef.current, { scaleX: 1, duration: 0.4, ease: 'power3.out' }, '-=0.2')
+        .to(headingRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.2')
+        .to(descRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+        .to(btnRef.current, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, '-=0.2')
 
     }, sectionRef)
     return () => ctx.revert()

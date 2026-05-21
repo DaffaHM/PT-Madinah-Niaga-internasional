@@ -196,7 +196,7 @@ export default function HeroSection() {
             ref={descriptionRef}
             className="text-white md:text-gray-500 text-[14px] md:text-[16px] mb-8 max-w-[200px] md:max-w-3xl md:mx-auto leading-relaxed"
           >
-            <strong className="font-semibold">PT Madinah Niaga Internasional</strong> adalah gateway terpercaya untuk sourcing strategis dan logistik antara Arab Saudi dan Indonesia. Kami menemukan produk, mengurus regulasi, dan mengantarkan keunggulan langsung ke pintu Anda.
+            <strong className="font-semibold">PT Madinah Niaga Internasional</strong> is your premier gateway for strategic sourcing and seamless logistics between Saudi Arabia and Indonesia. We find the goods, handle the regulations, and deliver excellence directly to your door.
           </p>
 
           <button
@@ -205,7 +205,7 @@ export default function HeroSection() {
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="btn-custom-hover md:flex md:justify-center md:gap-2 md:items-center md:mx-auto md:text-lg md:bg-gray-50 md:backdrop-blur-md md:font-medium md:isolation-auto md:before:absolute md:before:w-full md:before:transition-all md:before:duration-700 md:before:hover:w-full md:before:-left-full md:before:hover:left-0 md:before:rounded-full md:hover:text-gray-50 md:before:-z-10 md:before:aspect-square md:before:hover:scale-150 md:before:hover:duration-700 md:relative md:z-10 md:px-4 md:py-2 md:overflow-hidden md:border md:border-gray-900 md:rounded-full md:group flex justify-start gap-2 items-center text-base bg-white text-gray-900 font-medium px-6 py-3 rounded-full border-0 hover:bg-gray-100 transition-all duration-300"
           >
-            Konsultasi Gratis
+            Get a Free Consultation
           </button>
 
           <div ref={scrollIndicatorRef} className="md:hidden mt-12 flex flex-col items-center gap-2">

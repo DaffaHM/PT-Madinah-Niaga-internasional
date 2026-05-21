@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "node --max-old-space-size=512 ./node_modules/next/dist/bin/next build",
+    "start": "node --max-old-space-size=256 ./node_modules/next/dist/bin/next start",
+    "start:standalone": "node --max-old-space-size=256 .next/standalone/server.js",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "gsap": "^3.15.0",

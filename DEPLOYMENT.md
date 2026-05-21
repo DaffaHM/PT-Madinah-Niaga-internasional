@@ -1,23 +1,10 @@
-# Panduan Deployment ke cPanel Shared Hosting (Build Lokal)
+# Panduan Deployment ke cPanel Shared Hosting (Static Export)
 
 ## Strategi Deploy
 
-> **Build dilakukan di komputer lokal, bukan di server.**
-> Server cPanel hanya menjalankan hasil build — tidak perlu `npm install` atau `npm run build` di server.
-> Ini menghindari error `ThreadPoolBuildError: Resource temporarily unavailable` akibat resource limit shared hosting.
-
----
-
-## Alur Kerja
-
-```
-Komputer Lokal                    Server cPanel
-──────────────                    ─────────────
-npm run build          →  upload  →  .next/standalone/
-                                     server.js
-                                     ↓
-                                  node server.js  (cPanel start)
-```
+> Website ini di-export sebagai **file HTML/CSS/JS statis murni**.
+> Tidak memerlukan Node.js App, tidak perlu build di server.
+> Cukup upload folder `out/` ke cPanel seperti website biasa.
 
 ---
 
@@ -27,103 +14,90 @@ npm run build          →  upload  →  .next/standalone/
 npm run build
 ```
 
-Script ini otomatis menjalankan dua tahap:
-1. `next build` — compile dan optimasi production
-2. `postbuild` — menyalin `public/` dan `.next/static/` ke dalam `.next/standalone/`
-
-Setelah selesai, folder `.next/standalone/` sudah self-contained dan siap upload.
-
----
-
-## Langkah 2 — File yang Diupload ke cPanel
-
-Upload **hanya** dua item berikut ke root aplikasi di cPanel:
+Hasil build ada di folder `out/` yang berisi:
 
 ```
-Yang diupload:
-├── server.js                    ← entry point cPanel (ada di root project)
-└── .next/
-    └── standalone/              ← seluruh folder ini
-        ├── server.js            ← standalone server Next.js
-        ├── package.json
-        ├── node_modules/        ← dependencies minimal (sudah include)
-        ├── public/              ← gambar & aset (sudah di-copy otomatis)
-        └── .next/
-            ├── static/          ← JS, CSS chunks (sudah di-copy otomatis)
-            └── server/          ← server-side bundles
-```
-
-**Jangan upload:**
-- `node_modules/` di root project (besar, tidak diperlukan)
-- `src/` (source code, tidak diperlukan di production)
-- `.git/`
-- `*.ts`, `*.tsx` (source files)
-
----
-
-## Langkah 3 — Struktur Akhir di Server cPanel
-
-```
-/home/username/madinahniaga.com/
-├── server.js                    ← startup file (set di cPanel Node.js App)
-└── .next/
-    └── standalone/
-        ├── server.js
-        ├── package.json
-        ├── node_modules/
-        ├── public/
-        │   ├── logo-navv.png
-        │   ├── kurma.png
-        │   └── ... (semua gambar)
-        └── .next/
-            ├── static/
-            │   ├── chunks/
-            │   └── css/
-            └── server/
+out/
+├── index.html          ← halaman utama
+├── 404.html            ← halaman not found
+├── robots.txt
+├── sitemap.xml
+├── *.png / *.svg       ← semua gambar dari public/
+└── _next/
+    ├── static/
+    │   ├── chunks/     ← JavaScript bundles
+    │   └── css/        ← CSS bundles
+    └── ...
 ```
 
 ---
 
-## Langkah 4 — Konfigurasi Node.js App di cPanel
+## Langkah 2 — Upload ke cPanel
 
-Masuk ke **cPanel → Node.js App → Create Application** (atau Edit jika sudah ada):
+### Opsi A — File Manager cPanel (Recommended)
 
-| Setting | Value |
-|---|---|
-| Node.js version | **18.x** atau **20.x** |
-| Application mode | **Production** |
-| Application root | `/home/username/madinahniaga.com` |
-| Application URL | `madinahniaga.com` |
-| **Application startup file** | **`server.js`** |
+1. Login ke **cPanel → File Manager**
+2. Masuk ke folder `public_html` (atau subfolder domain/subdomain)
+3. Klik **Upload** → upload semua isi folder `out/` (bukan folder `out/`-nya, tapi **isinya**)
+4. Pastikan `index.html` ada langsung di `public_html/`
 
-> Startup file adalah `server.js` di root aplikasi (bukan yang di dalam standalone).
-> File ini akan mem-forward ke `.next/standalone/server.js` secara otomatis.
+### Opsi B — FTP (FileZilla, dll)
 
----
+1. Connect ke server via FTP
+2. Upload semua isi folder `out/` ke `public_html/`
 
-## Langkah 5 — Environment Variables di cPanel
+### Opsi C — Git + cPanel Git Version Control
 
-Di **cPanel → Node.js App → Environment Variables**, tambahkan:
-
-| Key | Value |
-|---|---|
-| `NODE_ENV` | `production` |
-| `NEXT_PUBLIC_SITE_URL` | `https://madinahniaga.com` |
-
-> `PORT` dan `HOSTNAME` sudah di-handle otomatis oleh `server.js`.
+1. Push ke repository
+2. Di cPanel → Git Version Control → pull
+3. Set document root ke folder `out/`
 
 ---
 
-## Langkah 6 — Start Aplikasi
+## Langkah 3 — Struktur Akhir di Server
 
-Klik tombol **Run JS Script** atau **Restart** di cPanel Node.js App.
+```
+public_html/
+├── index.html
+├── 404.html
+├── robots.txt
+├── sitemap.xml
+├── logo-navv.png
+├── kurma.png
+├── ... (semua gambar)
+└── _next/
+    └── static/
+        ├── chunks/
+        └── css/
+```
 
-Atau via Terminal cPanel:
+---
 
-```bash
-# Tidak perlu npm install atau npm run build!
-# Cukup restart aplikasi
-touch /home/username/madinahniaga.com/tmp/restart.txt
+## Langkah 4 — Konfigurasi .htaccess (Opsional tapi Direkomendasikan)
+
+Buat file `.htaccess` di `public_html/` untuk handle routing dan error page:
+
+```apache
+# Aktifkan mod_rewrite
+Options -MultiViews
+RewriteEngine On
+
+# Redirect ke HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Handle 404
+ErrorDocument 404 /404.html
+
+# Cache static assets
+<FilesMatch "\.(js|css|png|jpg|jpeg|webp|svg|ico|woff2?)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Cache HTML — jangan cache terlalu lama
+<FilesMatch "\.html$">
+  Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
 ```
 
 ---
@@ -136,40 +110,27 @@ Setiap ada perubahan kode:
 # Di komputer lokal:
 npm run build
 
-# Upload ulang ke cPanel:
-# - server.js (jika berubah)
-# - .next/standalone/ (selalu upload ulang)
-
-# Restart di cPanel Node.js App
+# Upload ulang isi folder out/ ke public_html/
+# (timpa file lama)
 ```
 
 ---
 
-## Troubleshooting
+## Checklist Sebelum Upload
 
-### Aplikasi tidak start / error 500
-- Cek log di cPanel → Node.js App → Log
-- Pastikan `server.js` ada di root aplikasi
-- Pastikan folder `.next/standalone/` sudah diupload lengkap
-
-### Gambar tidak muncul
-- Pastikan folder `public/` ada di dalam `.next/standalone/public/`
-- Jalankan ulang `npm run build` di lokal (postbuild akan copy otomatis)
-
-### Error "Cannot find module"
-- Pastikan `.next/standalone/node_modules/` ikut terupload
-- Folder ini berisi dependencies minimal yang sudah di-bundle Next.js
-
-### Port conflict
-- cPanel biasanya assign port otomatis via variabel `PORT`
-- `server.js` sudah membaca `process.env.PORT` secara otomatis
+- [ ] `npm run build` berhasil tanpa error
+- [ ] Folder `out/` terbentuk dan ada `index.html` di dalamnya
+- [ ] Semua gambar ada di `out/` (bukan hanya di `public/`)
+- [ ] Upload **isi** folder `out/`, bukan folder `out/`-nya sendiri
+- [ ] `index.html` ada langsung di `public_html/`
 
 ---
 
 ## Catatan Penting
 
+- **Tidak perlu** Node.js App di cPanel
 - **Tidak perlu** `npm install` di server
-- **Tidak perlu** `npm run build` di server  
-- **Tidak perlu** `node_modules/` root di server
-- Semua dependencies sudah ada di `.next/standalone/node_modules/`
-- `public/` dan `.next/static/` sudah otomatis di-copy ke standalone saat `npm run build`
+- **Tidak perlu** `npm run build` di server
+- Website ini adalah **file statis murni** — bisa di-host di hosting manapun
+- Semua animasi GSAP tetap berjalan karena dijalankan di browser (client-side)
+- `next/image` menggunakan `unoptimized: true` — gambar di-serve langsung tanpa transformasi server

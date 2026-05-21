@@ -5,8 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "node scripts/deploy-prepare.js",
-    "start": "node server.js",
     "lint": "next lint"
   },
   "engines": {

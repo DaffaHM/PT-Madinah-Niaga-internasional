@@ -113,6 +113,23 @@ export default function HeroSection() {
           )
         })
       }
+
+      // Button hover GSAP
+      if (buttonRef.current) {
+        const btn = buttonRef.current
+        btn.addEventListener('mouseenter', () =>
+          gsap.to(btn, { scale: 1.05, duration: 0.2, ease: 'power2.out' })
+        )
+        btn.addEventListener('mouseleave', () =>
+          gsap.to(btn, { scale: 1, duration: 0.25, ease: 'power2.out' })
+        )
+        btn.addEventListener('mousedown', () =>
+          gsap.to(btn, { scale: 0.97, duration: 0.1, ease: 'power2.out' })
+        )
+        btn.addEventListener('mouseup', () =>
+          gsap.to(btn, { scale: 1.05, duration: 0.1, ease: 'power2.out' })
+        )
+      }
     }, heroRef)
 
     return () => ctx.revert()

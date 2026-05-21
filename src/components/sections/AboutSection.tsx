@@ -14,6 +14,7 @@ export default function AboutSection() {
   const labelRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
   const lineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -36,6 +37,23 @@ export default function AboutSection() {
         .to(lineRef.current, { scaleX: 1, duration: 0.4, ease: 'power3.out' }, '-=0.2')
         .to(headingRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.2')
         .to(descRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+
+      // Button hover GSAP
+      if (btnRef.current) {
+        const btn = btnRef.current
+        btn.addEventListener('mouseenter', () =>
+          gsap.to(btn, { scale: 1.05, duration: 0.2, ease: 'power2.out' })
+        )
+        btn.addEventListener('mouseleave', () =>
+          gsap.to(btn, { scale: 1, duration: 0.25, ease: 'power2.out' })
+        )
+        btn.addEventListener('mousedown', () =>
+          gsap.to(btn, { scale: 0.97, duration: 0.1, ease: 'power2.out' })
+        )
+        btn.addEventListener('mouseup', () =>
+          gsap.to(btn, { scale: 1.05, duration: 0.1, ease: 'power2.out' })
+        )
+      }
 
     }, sectionRef)
     return () => ctx.revert()
@@ -102,6 +120,7 @@ export default function AboutSection() {
 
             {/* CTA Button */}
             <button 
+              ref={btnRef}
               onClick={() => {
                 document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
               }}

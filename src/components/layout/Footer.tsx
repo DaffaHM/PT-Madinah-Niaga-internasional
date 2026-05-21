@@ -113,7 +113,7 @@ export default function Footer() {
             {/* Info Legal & Kontak */}
             <div className="mt-5 space-y-2">
               <div className="flex items-start gap-2">
-                <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">TEL</span>
+                <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">Phone</span>
                 <a
                   href="tel:+6281249794530"
                   className="text-gray-600 text-[12px] hover:text-[#0F5132] transition-colors duration-200"
@@ -122,7 +122,7 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-start gap-2">
-                <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">WANIB</span>
+                <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">NIB</span>
                 <span className="text-gray-600 text-[12px]">3003260096559</span>
               </div>
               <div className="flex items-start gap-2">

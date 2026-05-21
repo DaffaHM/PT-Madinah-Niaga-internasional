@@ -34,11 +34,7 @@ export default function CTASection() {
       tl.to(headingRef.current, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
         .to(bodyRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
         .to(buttonRef.current, {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          ease: 'back.out(1.6)',
+          opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.6)',
         }, '-=0.4')
 
       // Button pop on hover
@@ -50,21 +46,30 @@ export default function CTASection() {
         btn.addEventListener('mouseleave', onLeave)
       }
 
-      // Ring rotations
-      gsap.to(ring1Ref.current, { rotation: 360, duration: 18, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
-      gsap.to(ring2Ref.current, { rotation: -360, duration: 28, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
-      gsap.to(ring3Ref.current, { rotation: 360, duration: 45, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
+      // Ring animations — desktop only
+      const mm = gsap.matchMedia()
+      mm.add('(min-width: 768px)', () => {
+        // Rotations
+        gsap.to(ring1Ref.current, { rotation: 360, duration: 18, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
+        gsap.to(ring2Ref.current, { rotation: -360, duration: 28, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
+        gsap.to(ring3Ref.current, { rotation: 360, duration: 45, ease: 'none', repeat: -1, transformOrigin: '50% 50%' })
 
-      // Breathe
-      gsap.to(ring1Ref.current, { scale: 1.06, duration: 4, ease: 'power1.inOut', repeat: -1, yoyo: true })
-      gsap.to(ring2Ref.current, { scale: 1.04, duration: 6, ease: 'power1.inOut', repeat: -1, yoyo: true, delay: 2 })
-      gsap.to(ring3Ref.current, { scale: 1.03, duration: 8, ease: 'power1.inOut', repeat: -1, yoyo: true, delay: 4 })
+        // Breathe
+        gsap.to(ring1Ref.current, { scale: 1.06, duration: 4, ease: 'power1.inOut', repeat: -1, yoyo: true })
+        gsap.to(ring2Ref.current, { scale: 1.04, duration: 6, ease: 'power1.inOut', repeat: -1, yoyo: true, delay: 2 })
+        gsap.to(ring3Ref.current, { scale: 1.03, duration: 8, ease: 'power1.inOut', repeat: -1, yoyo: true, delay: 4 })
+      })
+
+      // Mobile — sembunyikan ring dan glow
+      mm.add('(max-width: 767px)', () => {
+        gsap.set([ring1Ref.current, ring2Ref.current, ring3Ref.current, glowRef.current], { opacity: 0 })
+      })
     }, sectionRef)
 
-    // Mouse parallax
+    // Mouse parallax — desktop only
     const section = sectionRef.current
     const handleMouseMove = (e: MouseEvent) => {
-      if (!section) return
+      if (!section || window.innerWidth < 768) return
       const rect = section.getBoundingClientRect()
       const dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width
       const dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height
@@ -76,6 +81,7 @@ export default function CTASection() {
     }
 
     const handleMouseLeave = () => {
+      if (window.innerWidth < 768) return
       gsap.to([ring1Ref.current, ring2Ref.current, ring3Ref.current], {
         x: 0, y: 0, duration: 1.5, ease: 'power2.out',
       })

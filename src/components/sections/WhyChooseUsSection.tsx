@@ -182,9 +182,19 @@ export default function WhyChooseUsSection() {
                     Legal<br />Certainty
                   </h3>
                   <div className="card-gold-line w-6 h-[1px] bg-[#C8A46A] mb-3" style={{ transformOrigin: 'left' }} />
-                  <p className="text-gray-500 text-[12px] leading-relaxed">
+                  <p className="text-gray-500 text-[12px] leading-relaxed mb-4">
                     Operates as a fully registered and legal Indonesian entity (PT Madinah Niaga Internasional).
                   </p>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#C8A46A] text-[10px] font-semibold tracking-wide shrink-0">NIB</span>
+                      <span className="text-gray-500 text-[11px]">3003260096559</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-[#C8A46A] text-[10px] font-semibold tracking-wide shrink-0 mt-0.5">SK</span>
+                      <span className="text-gray-500 text-[11px] leading-relaxed">AHU-A000643.AH.01.30.Tahun 2026</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

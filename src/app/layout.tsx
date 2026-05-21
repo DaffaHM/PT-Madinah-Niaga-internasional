@@ -86,8 +86,7 @@ export const metadata: Metadata = {
     apple: '/logo.svg',
   },
   verification: {
-    // Isi dengan kode verifikasi dari Google Search Console setelah daftar
-    // google: 'KODE_VERIFIKASI_GOOGLE_SEARCH_CONSOLE',
+    google: 'oDeNL4xtRUyOKsqsxCLRPqptrkglciKl6oOVPeweCEE',
   },
 }
 

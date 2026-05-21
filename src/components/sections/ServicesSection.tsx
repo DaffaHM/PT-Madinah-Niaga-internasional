@@ -93,8 +93,10 @@ export default function ServicesSection() {
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
   const cardsGridRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
   const scrollTriggerInstance = useRef<ScrollTrigger | null>(null)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const prevServiceRef = useRef(1)
 
   const handleServiceClick = (serviceId: number) => {
     setActiveService(serviceId)
@@ -156,13 +158,30 @@ export default function ServicesSection() {
     return () => clearInterval(autoSlide)
   }, [services.length])
 
+  // Crossfade right panel when active service changes
+  useEffect(() => {
+    if (prevServiceRef.current !== activeService && rightRef.current) {
+      gsap.fromTo(rightRef.current,
+        { opacity: 0.4, scale: 0.97 },
+        { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+      )
+    }
+    prevServiceRef.current = activeService
+  }, [activeService])
+
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Heading entrance
+      gsap.fromTo(headingRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+        }
+      )
+
       // Initial fade in animation
-      gsap.set([leftRef.current, rightRef.current], {
-        opacity: 0,
-        y: 50
-      })
+      gsap.set([leftRef.current, rightRef.current], { opacity: 0, y: 50 })
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -227,7 +246,7 @@ export default function ServicesSection() {
   const activeServiceData = services.find(s => s.id === activeService) || services[0]
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 lg:py-32 bg-white">
+    <section id="services" ref={sectionRef} className="py-16 md:py-24 lg:py-32 bg-white">
       <div className="container mx-auto px-4 md:px-16 lg:px-20 max-w-[1600px]">
         
         {/* MOBILE ONLY - Premium Swipe Layout */}
@@ -281,6 +300,7 @@ export default function ServicesSection() {
                         src={service.image}
                         alt={service.title}
                         fill
+                        sizes="85vw"
                         className="object-cover"
                       />
                       {/* Dark Green Gradient Overlay */}
@@ -391,6 +411,7 @@ export default function ServicesSection() {
                     src={activeServiceData.image}
                     alt={activeServiceData.title}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
                     className="object-cover"
                   />
                   {/* Dark Green Gradient Overlay */}
@@ -413,11 +434,6 @@ export default function ServicesSection() {
         </div>
       </div>
 
-      <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   )
 }

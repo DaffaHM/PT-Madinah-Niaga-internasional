@@ -1,206 +1,181 @@
 'use client'
 
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Facebook, 
-  Linkedin, 
-  Instagram, 
-  Twitter,
-  ArrowRight,
-  Globe,
-  Clock
-} from 'lucide-react'
+import Image from 'next/image'
+import { useRef, useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Footer() {
-  const services = [
-    'Export Services',
-    'Import Services', 
-    'Trade Documentation',
-    'Trade Finance',
-    'Logistics Management',
-    'Consultation'
+  const footerRef = useRef<HTMLElement>(null)
+  const col1Ref = useRef<HTMLDivElement>(null)
+  const col2Ref = useRef<HTMLDivElement>(null)
+  const col3Ref = useRef<HTMLDivElement>(null)
+  const dividerRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Columns stagger entrance
+      gsap.fromTo(
+        [col1Ref.current, col2Ref.current, col3Ref.current],
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out',
+          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', toggleActions: 'play none none none' },
+        }
+      )
+
+      // Gold divider draw
+      gsap.fromTo(dividerRef.current,
+        { scaleX: 0, transformOrigin: 'left' },
+        {
+          scaleX: 1, duration: 0.8, ease: 'power3.out', delay: 0.3,
+          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', toggleActions: 'play none none none' },
+        }
+      )
+
+      // Bottom bar fade
+      gsap.fromTo(bottomRef.current,
+        { opacity: 0 },
+        {
+          opacity: 1, duration: 0.6, delay: 0.6, ease: 'power2.out',
+          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', toggleActions: 'play none none none' },
+        }
+      )
+
+      // Commodity tags pop
+      gsap.fromTo('.footer-tag',
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1, scale: 1, duration: 0.4, stagger: 0.08, ease: 'back.out(1.7)', delay: 0.5,
+          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', toggleActions: 'play none none none' },
+        }
+      )
+    }, footerRef)
+
+    // Nav link hover nudge
+    const links = footerRef.current?.querySelectorAll('.footer-nav-link')
+    const cleanups: (() => void)[] = []
+    links?.forEach((link) => {
+      const el = link as HTMLElement
+      const onEnter = () => gsap.to(el, { x: 5, duration: 0.2, ease: 'power2.out' })
+      const onLeave = () => gsap.to(el, { x: 0, duration: 0.2, ease: 'power2.out' })
+      el.addEventListener('mouseenter', onEnter)
+      el.addEventListener('mouseleave', onLeave)
+      cleanups.push(() => {
+        el.removeEventListener('mouseenter', onEnter)
+        el.removeEventListener('mouseleave', onLeave)
+      })
+    })
+
+    return () => {
+      ctx.revert()
+      cleanups.forEach(fn => fn())
+    }
+  }, [])
+  const navLinks = [
+    { name: 'Home', href: '#home' },
+    { name: 'About Us', href: '#about' },
+    { name: 'Services', href: '#services' },
+    { name: 'Products', href: '#products' },
+    { name: 'Process', href: '#how-it-works' },
+    { name: 'Why Us', href: '#why-choose-us' },
   ]
 
-  const quickLinks = [
-    'Tentang Kami',
-    'Layanan',
-    'Produk',
-    'Pasar Global',
-    'Sertifikasi',
-    'Karir',
-    'Blog',
-    'FAQ'
-  ]
-
-  const legalLinks = [
-    'Privacy Policy',
-    'Terms of Service',
-    'Cookie Policy',
-    'Disclaimer'
-  ]
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    const el = document.getElementById(href.replace('#', ''))
+    if (el) el.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
-    <footer className="bg-navy-950 text-white">
-      {/* Main Footer */}
-      <div className="container-custom py-16">
-        <div className="grid lg:grid-cols-4 gap-8 lg:gap-12">
-          
-          {/* Company Info */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center mb-6">
-              <div className="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center mr-3">
-                <span className="text-navy-900 font-bold text-xl">GT</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">
-                  GLOBAL<span className="text-gold-400">TRADE</span>
-                </h1>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">
-                  Import • Export
-                </p>
-              </div>
+    <footer ref={footerRef} className="bg-[#FAF8F3] border-t border-[#EDE8DF]">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+
+          {/* Brand */}
+          <div ref={col1Ref} className="md:col-span-5">
+            <div className="mb-4">
+              <Image
+                src="/logo-navv.png"
+                alt="PT Madinah Niaga Internasional"
+                width={200}
+                height={40}
+                className="h-10 w-auto"
+              />
             </div>
-            
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              Mitra terpercaya untuk perdagangan internasional dengan 
-              pengalaman 15+ tahun dan jaringan global yang luas.
+            <p className="text-gray-600 text-[13px] leading-relaxed max-w-xs">
+              Your premier gateway for strategic sourcing and seamless logistics between Saudi Arabia and Indonesia.
             </p>
 
-            {/* Social Media */}
-            <div className="flex items-center gap-3">
-              <span className="text-gray-400 text-sm">Follow Us:</span>
-              <div className="flex gap-2">
-                <a href="#" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gold-500 transition-colors">
-                  <Facebook className="w-4 h-4" />
-                </a>
-                <a href="#" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gold-500 transition-colors">
-                  <Linkedin className="w-4 h-4" />
-                </a>
-                <a href="#" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gold-500 transition-colors">
-                  <Instagram className="w-4 h-4" />
-                </a>
-                <a href="#" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gold-500 transition-colors">
-                  <Twitter className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
+            {/* Divider */}
+            <div ref={dividerRef} className="mt-6 w-12 h-[1px] bg-[#C8A46A]/40" />
+          </div>
+
+          {/* Navigation */}
+          <div ref={col2Ref} className="md:col-span-3">
+            <h4 className="text-[11px] tracking-[0.2em] uppercase text-[#C8A46A] font-semibold mb-5">
+              Navigation
+            </h4>
+            <ul className="space-y-3">
+              {navLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className="footer-nav-link inline-block text-gray-600 hover:text-[#0F5132] transition-colors duration-300 text-[13px] cursor-pointer"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Services */}
-          <div>
-            <h3 className="text-lg font-bold mb-6">Layanan Kami</h3>
+          <div ref={col3Ref} className="md:col-span-4">
+            <h4 className="text-[11px] tracking-[0.2em] uppercase text-[#C8A46A] font-semibold mb-5">
+              Services
+            </h4>
             <ul className="space-y-3">
-              {services.map((service) => (
-                <li key={service}>
-                  <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2 group">
-                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {service}
-                  </a>
-                </li>
+              {[
+                'Strategic Product Sourcing',
+                'Quality Assurance & Compliance',
+                'End-to-End Logistics',
+                'Custom Sourcing Requests',
+              ].map((s) => (
+                <li key={s} className="text-gray-600 text-[13px]">{s}</li>
               ))}
             </ul>
-          </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-bold mb-6">Quick Links</h3>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-gray-300 hover:text-gold-400 transition-colors flex items-center gap-2 group">
-                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-bold mb-6">Hubungi Kami</h3>
-            
-            <div className="space-y-4 mb-6">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-gray-300">
-                    Jl. Sudirman No. 123<br />
-                    Jakarta Pusat 10220<br />
-                    Indonesia
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-gold-400" />
-                <a href="tel:+622112345678" className="text-gray-300 hover:text-gold-400 transition-colors">
-                  +62 21 1234 5678
-                </a>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-gold-400" />
-                <a href="mailto:info@globaltrade.co.id" className="text-gray-300 hover:text-gold-400 transition-colors">
-                  info@globaltrade.co.id
-                </a>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-gold-400" />
-                <span className="text-gray-300">24/7 Customer Support</span>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="bg-gray-800/50 rounded-xl p-4">
-              <h4 className="font-semibold mb-3">Newsletter</h4>
-              <p className="text-sm text-gray-400 mb-4">
-                Dapatkan update terbaru tentang perdagangan global
-              </p>
-              <div className="flex gap-2">
-                <input 
-                  type="email" 
-                  placeholder="Email Anda"
-                  className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gold-400"
-                />
-                <button className="bg-gold-500 hover:bg-gold-600 px-4 py-2 rounded-lg transition-colors">
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+            <div className="mt-8">
+              <h4 className="text-[11px] tracking-[0.2em] uppercase text-[#C8A46A] font-semibold mb-4">
+                Commodities
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {['Dates & Spices', 'Industrial', 'Consumer Goods', 'Custom'].map((tag) => (
+                  <span
+                    key={tag}
+                    className="footer-tag text-[11px] text-gray-600 border border-gray-300 rounded-full px-3 py-1"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="container-custom py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-gray-400 text-sm">
-              © 2024 GlobalTrade. All rights reserved.
-            </div>
-            
-            <div className="flex flex-wrap items-center gap-6 text-sm">
-              {legalLinks.map((link, index) => (
-                <span key={link} className="flex items-center gap-6">
-                  <a href="#" className="text-gray-400 hover:text-gold-400 transition-colors">
-                    {link}
-                  </a>
-                  {index < legalLinks.length - 1 && (
-                    <span className="text-gray-600">•</span>
-                  )}
-                </span>
-              ))}
-            </div>
-            
-            <div className="flex items-center gap-2 text-gray-400 text-sm">
-              <Globe className="w-4 h-4" />
-              <span>Indonesia</span>
-            </div>
-          </div>
+      {/* Bottom bar */}
+      <div ref={bottomRef} className="border-t border-[#EDE8DF]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 py-5 flex flex-col md:flex-row justify-between items-center gap-3">
+          <p className="text-gray-500 text-[12px]">
+            © {new Date().getFullYear()} PT Madinah Niaga Internasional. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

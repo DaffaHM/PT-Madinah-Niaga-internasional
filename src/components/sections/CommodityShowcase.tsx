@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -110,11 +111,14 @@ export default function CommodityShowcase() {
 
     gsap.fromTo(
       section.querySelectorAll('.commodity-card'),
-      { opacity: 0, y: 40 },
+      (index: number) => ({
+        opacity: 0,
+        x: index % 2 === 0 ? -80 : 80,
+      }),
       {
         opacity: 1,
-        y: 0,
-        duration: 0.9,
+        x: 0,
+        duration: 0.8,
         stagger: 0.15,
         ease: 'power3.out',
         scrollTrigger: {
@@ -123,6 +127,29 @@ export default function CommodityShowcase() {
         },
       }
     );
+
+    // Card hover GSAP micro-interactions (desktop)
+    const mm = gsap.matchMedia()
+    mm.add('(min-width: 1024px)', () => {
+      const cards = section.querySelectorAll('.commodity-card')
+      cards.forEach((card) => {
+        const el = card as HTMLElement
+        const img = el.querySelector('img') as HTMLElement
+        const goldLine = el.querySelector('.gold-line') as HTMLElement
+
+        const onEnter = () => {
+          gsap.to(img, { scale: 1.07, duration: 0.6, ease: 'power2.out' })
+          if (goldLine) gsap.to(goldLine, { scaleX: 1, opacity: 1, duration: 0.4, ease: 'power2.out' })
+        }
+        const onLeave = () => {
+          gsap.to(img, { scale: 1, duration: 0.6, ease: 'power2.out' })
+          if (goldLine) gsap.to(goldLine, { scaleX: 0, opacity: 0.6, duration: 0.4, ease: 'power2.out' })
+        }
+
+        el.addEventListener('mouseenter', onEnter)
+        el.addEventListener('mouseleave', onLeave)
+      })
+    })
   }, []);
 
   // Auto slide
@@ -211,6 +238,7 @@ export default function CommodityShowcase() {
 
   return (
     <section
+      id="products"
       ref={sectionRef}
       className="relative w-full bg-white py-12 md:py-16 lg:py-20"
     >
@@ -290,10 +318,12 @@ export default function CommodityShowcase() {
               >
                 <div className="relative h-[320px] rounded-[20px] overflow-hidden transition-all duration-700">
                   <div className="absolute inset-0 overflow-hidden rounded-[20px]">
-                    <img
+                    <Image
                       src={commodity.image}
                       alt={commodity.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="w-full h-full object-cover"
                     />
                   </div>
 
@@ -302,7 +332,7 @@ export default function CommodityShowcase() {
                     style={{ background: commodity.gradient }}
                   ></div>
 
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C8A46A] to-transparent opacity-60"></div>
+                  <div className="gold-line absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C8A46A] to-transparent opacity-60" style={{ transformOrigin: 'left' }}></div>
 
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="transform transition-transform duration-500 group-hover:translate-y-[-8px]">
@@ -338,10 +368,12 @@ export default function CommodityShowcase() {
               >
                 <div className="relative h-[480px] md:h-[500px] lg:h-[520px] rounded-[28px] md:rounded-[32px] overflow-hidden transition-all duration-700">
                   <div className="absolute inset-0 overflow-hidden rounded-[28px] md:rounded-[32px]">
-                    <img
+                    <Image
                       src={commodity.image}
                       alt={commodity.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 85vw, (max-width: 1024px) 45vw, 33vw"
+                      className="w-full h-full object-cover"
                     />
                   </div>
 
@@ -350,7 +382,7 @@ export default function CommodityShowcase() {
                     style={{ background: commodity.gradient }}
                   ></div>
 
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C8A46A] to-transparent opacity-60"></div>
+                  <div className="gold-line absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C8A46A] to-transparent opacity-60" style={{ transformOrigin: 'left' }}></div>
 
                   <div className="absolute bottom-0 left-0 right-0 p-6 md:p-7 lg:p-8">
                     <div className="transform transition-transform duration-500 group-hover:translate-y-[-8px]">
@@ -385,11 +417,6 @@ export default function CommodityShowcase() {
         </div>
       </div>
 
-      <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 }

@@ -122,6 +122,15 @@ export default function Footer() {
                 </a>
               </div>
               <div className="flex items-start gap-2">
+                <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">Email</span>
+                <a
+                  href="mailto:madinahniagaintl@gmail.com"
+                  className="text-gray-600 text-[12px] hover:text-[#0F5132] transition-colors duration-200"
+                >
+                  madinahniagaintl@gmail.com
+                </a>
+              </div>
+              <div className="flex items-start gap-2">
                 <span className="text-[#C8A46A] text-[11px] font-semibold tracking-wide mt-0.5 shrink-0">NIB</span>
                 <span className="text-gray-600 text-[12px]">3003260096559</span>
               </div>
